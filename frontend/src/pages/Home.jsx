@@ -17,7 +17,8 @@ const Home = () => {
     phone: '',
     company: '',
     companySize: '',
-    message: ''
+    message: '',
+    website: '' // Honeypot field - bots will fill this
   });
   const [formErrors, setFormErrors] = useState({});
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -66,6 +67,13 @@ const Home = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    // Bot detection: Check honeypot field
+    if (formData.website && formData.website.trim() !== '') {
+      // Bot detected - silently reject without showing error
+      console.log('Bot submission blocked');
+      return;
+    }
+    
     // Validate form
     const errors = validateForm();
     if (Object.keys(errors).length > 0) {
@@ -80,7 +88,7 @@ const Home = () => {
       setFormSubmitted(true);
       setTimeout(() => {
         setFormSubmitted(false);
-        setFormData({ firstName: '', lastName: '', email: '', phone: '', company: '', companySize: '', message: '' });
+        setFormData({ firstName: '', lastName: '', email: '', phone: '', company: '', companySize: '', message: '', website: '' });
         setFormErrors({});
       }, 3000);
     } catch (error) {
@@ -384,6 +392,23 @@ const Home = () => {
                     />
                     {formErrors.email && <span className="error-message">{formErrors.email}</span>}
                   </div>
+
+                  {/* Honeypot field - hidden from humans, filled by bots */}
+                  <input
+                    type="text"
+                    name="website"
+                    value={formData.website}
+                    onChange={handleInputChange}
+                    style={{ 
+                      position: 'absolute',
+                      left: '-5000px',
+                      opacity: 0,
+                      pointerEvents: 'none'
+                    }}
+                    tabIndex="-1"
+                    autoComplete="off"
+                    aria-hidden="true"
+                  />
 
                   <div className="form-group">
                     <label htmlFor="phone" className="form-label">Phone Number</label>
