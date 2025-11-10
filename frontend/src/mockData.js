@@ -104,8 +104,8 @@ export const mockData = {
     }
   ],
   contact: {
-    email: "info@aurumautomation.com",
-    phone: "+1 (868) 123-4567",
-    website: "https://www.aurumautomation.com"
+    email: "marc.alleyne@aurumtechnologyltd.com",
+    phone: "(868) 477-9318",
+    website: "https://aurumtechnologyltd.com"
   }
 };
