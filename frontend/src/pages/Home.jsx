@@ -260,16 +260,30 @@ const Home = () => {
               <Card className="form-card">
                 <form onSubmit={handleSubmit} className="contact-form">
                   <div className="form-group">
-                    <label htmlFor="name" className="form-label">Name *</label>
+                    <label htmlFor="firstName" className="form-label">First Name *</label>
                     <Input
-                      id="name"
-                      name="name"
+                      id="firstName"
+                      name="firstName"
                       type="text"
                       required
-                      value={formData.name}
+                      value={formData.firstName}
                       onChange={handleInputChange}
                       className="form-input"
-                      placeholder="Your name"
+                      placeholder="John"
+                    />
+                  </div>
+                  
+                  <div className="form-group">
+                    <label htmlFor="lastName" className="form-label">Last Name *</label>
+                    <Input
+                      id="lastName"
+                      name="lastName"
+                      type="text"
+                      required
+                      value={formData.lastName}
+                      onChange={handleInputChange}
+                      className="form-input"
+                      placeholder="Smith"
                     />
                   </div>
                   
@@ -288,7 +302,7 @@ const Home = () => {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="phone" className="form-label">Phone</label>
+                    <label htmlFor="phone" className="form-label">Phone Number</label>
                     <Input
                       id="phone"
                       name="phone"
@@ -301,7 +315,7 @@ const Home = () => {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="company" className="form-label">Company</label>
+                    <label htmlFor="company" className="form-label">Company Name</label>
                     <Input
                       id="company"
                       name="company"
@@ -311,6 +325,23 @@ const Home = () => {
                       className="form-input"
                       placeholder="Your company name"
                     />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="companySize" className="form-label">Company Size</label>
+                    <Select onValueChange={handleSelectChange} value={formData.companySize}>
+                      <SelectTrigger className="form-input">
+                        <SelectValue placeholder="Select company size" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="1-10">1-10 employees</SelectItem>
+                        <SelectItem value="11-50">11-50 employees</SelectItem>
+                        <SelectItem value="51-200">51-200 employees</SelectItem>
+                        <SelectItem value="201-500">201-500 employees</SelectItem>
+                        <SelectItem value="501-1000">501-1000 employees</SelectItem>
+                        <SelectItem value="1000+">1000+ employees</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div className="form-group">
@@ -334,8 +365,8 @@ const Home = () => {
                     </div>
                   )}
 
-                  <Button type="submit" className="btn-submit">
-                    Send Message
+                  <Button type="submit" className="btn-submit" disabled={isSubmitting}>
+                    {isSubmitting ? 'Sending...' : 'Send Message'}
                   </Button>
                 </form>
               </Card>
