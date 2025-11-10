@@ -3,31 +3,49 @@ import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
 import { Input } from '../components/ui/input';
 import { Textarea } from '../components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { MessageSquare, Users, Mail, Phone, Share2, CheckCircle2, Star, Clock, Shield, Award } from 'lucide-react';
 import { mockData } from '../mockData';
+import axios from 'axios';
 
 const Home = () => {
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     phone: '',
     company: '',
+    companySize: '',
     message: ''
   });
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSelectChange = (value) => {
+    setFormData({ ...formData, companySize: value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    setFormSubmitted(true);
-    setTimeout(() => {
-      setFormSubmitted(false);
-      setFormData({ name: '', email: '', phone: '', company: '', message: '' });
-    }, 3000);
+    setIsSubmitting(true);
+    
+    try {
+      await axios.post('https://aurumtechnologyltd.app.n8n.cloud/webhook/ab77526e-e5fa-475d-ae34-2d3a88863e19', formData);
+      setFormSubmitted(true);
+      setTimeout(() => {
+        setFormSubmitted(false);
+        setFormData({ firstName: '', lastName: '', email: '', phone: '', company: '', companySize: '', message: '' });
+      }, 3000);
+    } catch (error) {
+      console.error('Form submission failed:', error);
+      alert('Failed to submit form. Please try again or contact us directly.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const scrollToContact = () => {
