@@ -4,7 +4,8 @@ import { Card } from '../components/ui/card';
 import { Input } from '../components/ui/input';
 import { Textarea } from '../components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import { MessageSquare, Users, Mail, Phone, Share2, CheckCircle2, Star, Clock, Shield, Award } from 'lucide-react';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../components/ui/accordion';
+import { MessageSquare, Users, Mail, Phone, Share2, CheckCircle2, Star, Clock, Shield, Award, Menu, X, Lock } from 'lucide-react';
 import { mockData } from '../mockData';
 import axios from 'axios';
 
@@ -18,19 +19,60 @@ const Home = () => {
     companySize: '',
     message: ''
   });
+  const [formErrors, setFormErrors] = useState({});
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    // Clear error when user starts typing
+    if (formErrors[name]) {
+      setFormErrors({ ...formErrors, [name]: '' });
+    }
   };
 
   const handleSelectChange = (value) => {
     setFormData({ ...formData, companySize: value });
   };
 
+  const validateForm = () => {
+    const errors = {};
+    
+    if (!formData.firstName.trim()) {
+      errors.firstName = 'First name is required';
+    }
+    
+    if (!formData.lastName.trim()) {
+      errors.lastName = 'Last name is required';
+    }
+    
+    if (!formData.email.trim()) {
+      errors.email = 'Email is required';
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(formData.email)) {
+      errors.email = 'Please enter a valid email address';
+    }
+    
+    if (!formData.message.trim()) {
+      errors.message = 'Please tell us about your automation needs';
+    } else if (formData.message.trim().length < 10) {
+      errors.message = 'Please provide more details (at least 10 characters)';
+    }
+    
+    return errors;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validate form
+    const errors = validateForm();
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
+    }
+    
     setIsSubmitting(true);
     
     try {
@@ -39,6 +81,7 @@ const Home = () => {
       setTimeout(() => {
         setFormSubmitted(false);
         setFormData({ firstName: '', lastName: '', email: '', phone: '', company: '', companySize: '', message: '' });
+        setFormErrors({});
       }, 3000);
     } catch (error) {
       console.error('Form submission failed:', error);
@@ -70,7 +113,24 @@ const Home = () => {
             <a href="#tech" className="nav-link">Technology</a>
             <a href="#contact" className="nav-link">Contact</a>
           </nav>
+          <button 
+            className="mobile-menu-button" 
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
+        
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="mobile-menu">
+            <a href="#services" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>Services</a>
+            <a href="#pricing" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>Pricing</a>
+            <a href="#tech" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>Technology</a>
+            <a href="#contact" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>Contact</a>
+          </div>
+        )}
       </header>
 
       {/* Hero Section */}
@@ -86,10 +146,10 @@ const Home = () => {
             </p>
             <div className="hero-buttons">
               <Button onClick={scrollToContact} className="btn-primary">
-                Get Started
+                Get My Free Demo
               </Button>
               <Button onClick={() => window.location.href = '#services'} className="btn-secondary">
-                Our Services
+                See How It Works
               </Button>
             </div>
           </div>
@@ -212,6 +272,27 @@ const Home = () => {
         </div>
       </section>
 
+      {/* FAQ Section */}
+      <section id="faq" className="section faq-section">
+        <div className="section-container">
+          <h2 className="section-title">Frequently Asked Questions</h2>
+          <p className="section-subtitle">
+            Everything you need to know about our automation services
+          </p>
+          
+          <div className="faq-container">
+            <Accordion type="single" collapsible className="faq-accordion">
+              {mockData.faqs.map((faq, index) => (
+                <AccordionItem key={index} value={`item-${index}`} className="faq-item">
+                  <AccordionTrigger className="faq-question">{faq.question}</AccordionTrigger>
+                  <AccordionContent className="faq-answer">{faq.answer}</AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
+        </div>
+      </section>
+
       {/* Contact Section */}
       <section id="contact" className="section contact-section">
         <div className="section-container">
@@ -268,9 +349,10 @@ const Home = () => {
                       required
                       value={formData.firstName}
                       onChange={handleInputChange}
-                      className="form-input"
+                      className={`form-input ${formErrors.firstName ? 'error' : ''}`}
                       placeholder="John"
                     />
+                    {formErrors.firstName && <span className="error-message">{formErrors.firstName}</span>}
                   </div>
                   
                   <div className="form-group">
@@ -282,9 +364,10 @@ const Home = () => {
                       required
                       value={formData.lastName}
                       onChange={handleInputChange}
-                      className="form-input"
+                      className={`form-input ${formErrors.lastName ? 'error' : ''}`}
                       placeholder="Smith"
                     />
+                    {formErrors.lastName && <span className="error-message">{formErrors.lastName}</span>}
                   </div>
                   
                   <div className="form-group">
@@ -296,9 +379,10 @@ const Home = () => {
                       required
                       value={formData.email}
                       onChange={handleInputChange}
-                      className="form-input"
+                      className={`form-input ${formErrors.email ? 'error' : ''}`}
                       placeholder="your.email@company.com"
                     />
+                    {formErrors.email && <span className="error-message">{formErrors.email}</span>}
                   </div>
 
                   <div className="form-group">
@@ -352,10 +436,16 @@ const Home = () => {
                       required
                       value={formData.message}
                       onChange={handleInputChange}
-                      className="form-textarea"
+                      className={`form-textarea ${formErrors.message ? 'error' : ''}`}
                       placeholder="Tell us about your automation needs..."
                       rows={4}
                     />
+                    {formErrors.message && <span className="error-message">{formErrors.message}</span>}
+                  </div>
+
+                  <div className="privacy-notice">
+                    <Lock size={16} className="privacy-icon" />
+                    <span>Your information is secure. We never share your data and respect your privacy.</span>
                   </div>
 
                   {formSubmitted && (
@@ -366,7 +456,7 @@ const Home = () => {
                   )}
 
                   <Button type="submit" className="btn-submit" disabled={isSubmitting}>
-                    {isSubmitting ? 'Sending...' : 'Send Message'}
+                    {isSubmitting ? 'Sending Your Message...' : 'Get My Free Consultation'}
                   </Button>
                 </form>
               </Card>

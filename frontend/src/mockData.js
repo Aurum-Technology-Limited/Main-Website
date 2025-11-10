@@ -107,5 +107,39 @@ export const mockData = {
     email: "marc.alleyne@aurumtechnologyltd.com",
     phone: "(868) 477-9318",
     website: "https://aurumtechnologyltd.com"
-  }
+  },
+  faqs: [
+    {
+      question: "How long does implementation take?",
+      answer: "Most projects are completed within 2-4 weeks from kickoff. We start with a discovery call, build a custom demo for your approval, then implement and launch. Simple chatbots can go live in as little as 1 week, while complex multi-system integrations may take 4-6 weeks."
+    },
+    {
+      question: "Do I need technical expertise to use these solutions?",
+      answer: "Not at all! We handle all the technical setup and provide you with simple, user-friendly dashboards. You'll receive full training on how to manage and update your automations. Our solutions are designed for business owners, not developers."
+    },
+    {
+      question: "Can you integrate with my existing systems?",
+      answer: "Yes! We specialize in connecting your automation to the tools you already use—WhatsApp Business, HubSpot, Salesforce, Gmail, Google Calendar, and many more. If you're using it, we can likely integrate with it."
+    },
+    {
+      question: "What if I'm not satisfied with the results?",
+      answer: "We offer a 30-day satisfaction guarantee. If you're not happy with your automation within the first 30 days, we'll work with you to make it right or provide a full refund of your setup fee. We stand behind our work."
+    },
+    {
+      question: "What ongoing support do you provide?",
+      answer: "Your monthly retainer includes ongoing technical support, system monitoring, updates, and optimization. You'll have direct access to our team via email and WhatsApp. We also provide monthly performance reports and recommendations for improvements."
+    },
+    {
+      question: "How much can I realistically save with automation?",
+      answer: "Our clients typically see 3x ROI within 6 months. This comes from capturing after-hours leads (avg. 20-40% more leads), reducing staff time on repetitive tasks (5-15 hours/week), and eliminating missed opportunities. We can provide a custom ROI estimate during your discovery call."
+    },
+    {
+      question: "What makes you different from hiring a freelancer?",
+      answer: "Unlike freelancers, we provide: (1) Enterprise-grade tools and platforms, (2) Ongoing support and maintenance, (3) Caribbean market expertise, (4) Proven systems with case studies, and (5) A 30-day satisfaction guarantee. You get a partner, not just a one-time project."
+    },
+    {
+      question: "Can I start small and scale up later?",
+      answer: "Absolutely! Many clients start with a single automation (like a lead capture chatbot) and expand as they see results. We design all systems to be scalable, so you can add features and integrations as your business grows."
+    }
+  ]
 };
